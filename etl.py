@@ -50,3 +50,34 @@ def process_song_data(spark, input_data, output_data):
     artists_table.write.parquet(output_data + "artists/", mode="overwrite")
 
 
+def process_log_data(spark, input_data, output_data):
+    """
+    Description:
+            Process the event log file and extract data for table time, users and songplays from it.
+
+    :param spark: a spark session instance
+    :param input_data: input file path
+    :param output_data: output file path
+    """
+
+    # get filepath to log data file
+    log_data = os.path.join(input_data, "log-data/")
+
+    # read log data file
+    df = spark.read.json(log_data, mode='PERMISSIVE', columnNameOfCorruptRecord='corrupt_record').drop_duplicates()
+
+    # filter by actions for song plays
+    df = df.filter(df.page == "NextSong")
+
+    
+def main():
+    spark = create_spark_session()
+    input_data = "s3://udacity-spark-project/"
+    output_data = "s3://udacity-spark-project/output/"
+
+    process_song_data(spark, input_data, output_data)
+    process_log_data(spark, input_data, output_data)
+
+
+if __name__ == "__main__":
+    main()
