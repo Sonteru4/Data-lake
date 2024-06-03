@@ -27,3 +27,20 @@ Running spark job (Before running job make sure EMR Role have access to s3)
 
     spark-submit etl.py --master yarn --deploy-mode client --driver-memory 4g --num-executors 2 --executor-memory 2g --executor-core 2
 
+## ETL Pipeline
+    
+1.  Read data from S3
+    
+    -   Song data:  `s3://udacity-dend/song_data`
+    -   Log data:  `s3://udacity-dend/log_data`
+    
+    The script reads song_data and load_data from S3.
+    
+3.  Process data using spark
+    
+    Transforms them to create five different tables listed below : 
+    #### Fact Table
+	 **songplays**  - records in log data associated with song plays i.e. records with page  `NextSong`
+    -   _songplay_id, start_time, user_id, level, song_id, artist_id, session_id, location, user_agent_
+
+
